@@ -17,24 +17,24 @@ import {
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 const industries = [
-  "Teknologi",
-  "Keuangan",
-  "Kesehatan",
-  "Pendidikan",
-  "Ritel",
-  "Manufaktur",
-  "Konstruksi",
-  "Transportasi",
-  "Media & Hiburan",
-  "Lainnya",
+  "Technology",
+  "Finance",
+  "Healthcare",
+  "Education",
+  "Retail",
+  "Manufacturing",
+  "Construction",
+  "Transportation",
+  "Media & Entertainment",
+  "Other",
 ];
 
 const companySizes = [
-  "1-10 karyawan",
-  "11-50 karyawan",
-  "51-200 karyawan",
-  "201-500 karyawan",
-  "500+ karyawan",
+  "1-10 employees",
+  "11-50 employees",
+  "51-200 employees",
+  "201-500 employees",
+  "500+ employees",
 ];
 
 export default function CompanyInfoStep() {
@@ -57,7 +57,7 @@ export default function CompanyInfoStep() {
     setNameValidation({
       isChecking: true,
       isValid: null,
-      message: "Memeriksa ketersediaan nama...",
+      message: "Checking name availability...",
     });
 
     try {
@@ -72,7 +72,7 @@ export default function CompanyInfoStep() {
         setNameValidation({
           isChecking: false,
           isValid: null,
-          message: "Terjadi kesalahan saat memeriksa nama perusahaan",
+          message: "Error occurred while checking company name",
         });
         return;
       }
@@ -82,13 +82,13 @@ export default function CompanyInfoStep() {
           isChecking: false,
           isValid: false,
           message:
-            "Nama perusahaan ini sudah terdaftar. Silakan gunakan nama lain.",
+            "This company name is already registered. Please use a different name.",
         });
       } else {
         setNameValidation({
           isChecking: false,
           isValid: true,
-          message: "Nama perusahaan tersedia!",
+          message: "Company name is available!",
         });
       }
     } catch (err) {
@@ -96,7 +96,7 @@ export default function CompanyInfoStep() {
       setNameValidation({
         isChecking: false,
         isValid: null,
-        message: "Terjadi kesalahan yang tidak terduga",
+        message: "An unexpected error occurred",
       });
     }
   };
@@ -110,7 +110,7 @@ export default function CompanyInfoStep() {
     const urlPattern =
       /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(\/.*)?$/;
     if (!urlPattern.test(url)) {
-      setWebsiteError("Format URL tidak valid. Contoh: https://example.com");
+      setWebsiteError("Invalid URL format. Example: https://example.com");
       return false;
     }
 
@@ -132,7 +132,7 @@ export default function CompanyInfoStep() {
   const canContinue = () => {
     return (
       companyInfo.name.trim() !== "" &&
-      nameValidation.isValid === true &&
+      (nameValidation.isValid === true || nameValidation.isValid === null) &&
       !websiteError &&
       !nameValidation.isChecking
     );
@@ -148,10 +148,10 @@ export default function CompanyInfoStep() {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Langkah 1: Informasi Perusahaan Anda
+          Step 1: Your Company Information
         </h1>
         <p className="text-gray-600">
-          Berikan informasi dasar tentang perusahaan Anda untuk memulai
+          Provide basic information about your company to get started
         </p>
       </div>
 
@@ -162,7 +162,7 @@ export default function CompanyInfoStep() {
             htmlFor="companyName"
             className="text-sm font-medium text-gray-700"
           >
-            Nama Perusahaan <span className="text-red-500">*</span>
+            Company Name <span className="text-red-500">*</span>
           </Label>
           <Input
             id="companyName"
@@ -177,7 +177,7 @@ export default function CompanyInfoStep() {
               });
             }}
             onBlur={handleNameBlur}
-            placeholder="Masukkan nama perusahaan"
+            placeholder="Enter company name"
             className={`${
               nameValidation.isValid === false
                 ? "border-red-500"
@@ -214,14 +214,14 @@ export default function CompanyInfoStep() {
             htmlFor="industry"
             className="text-sm font-medium text-gray-700"
           >
-            Industri Perusahaan
+            Company Industry
           </Label>
           <Select
             value={companyInfo.industry}
             onValueChange={(value) => updateCompanyInfo("industry", value)}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Pilih industri perusahaan" />
+              <SelectValue placeholder="Select company industry" />
             </SelectTrigger>
             <SelectContent>
               {industries.map((industry) => (
@@ -239,14 +239,14 @@ export default function CompanyInfoStep() {
             htmlFor="companySize"
             className="text-sm font-medium text-gray-700"
           >
-            Ukuran Perusahaan (Jumlah Karyawan)
+            Company Size (Number of Employees)
           </Label>
           <Select
             value={companyInfo.companySize}
             onValueChange={(value) => updateCompanyInfo("companySize", value)}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Pilih ukuran perusahaan" />
+              <SelectValue placeholder="Select company size" />
             </SelectTrigger>
             <SelectContent>
               {companySizes.map((size) => (
@@ -264,7 +264,7 @@ export default function CompanyInfoStep() {
             htmlFor="website"
             className="text-sm font-medium text-gray-700"
           >
-            Website Perusahaan
+            Company Website
           </Label>
           <Input
             id="website"
@@ -288,13 +288,13 @@ export default function CompanyInfoStep() {
             htmlFor="address"
             className="text-sm font-medium text-gray-700"
           >
-            Alamat Perusahaan
+            Company Address
           </Label>
           <Textarea
             id="address"
             value={companyInfo.address}
             onChange={(e) => updateCompanyInfo("address", e.target.value)}
-            placeholder="Masukkan alamat lengkap perusahaan"
+            placeholder="Enter complete company address"
             rows={3}
           />
         </div>
@@ -307,7 +307,7 @@ export default function CompanyInfoStep() {
           disabled={!canContinue()}
           className="px-8 py-2"
         >
-          Lanjutkan
+          Continue
         </Button>
       </div>
     </div>

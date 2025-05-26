@@ -2,6 +2,8 @@
 
 import { useOnboarding } from "@/contexts/onboarding-context";
 import CompanyInfoStep from "@/components/onboarding/company-info-step";
+import TeamSetupStep from "@/components/onboarding/team-setup-step";
+import FinalSetupStep from "@/components/onboarding/final-setup-step";
 
 export default function OnboardingPage() {
   const { currentStep } = useOnboarding();
@@ -10,13 +12,30 @@ export default function OnboardingPage() {
     switch (currentStep) {
       case 1:
         return <CompanyInfoStep />;
+      case 2:
+        return <TeamSetupStep />;
+      case 3:
+        return <FinalSetupStep />;
       default:
         return <CompanyInfoStep />;
     }
   };
 
+  const getStepTitle = () => {
+    switch (currentStep) {
+      case 1:
+        return "Company Information";
+      case 2:
+        return "Team Setup";
+      case 3:
+        return "Final Setup";
+      default:
+        return "Company Information";
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
       <div className="w-full max-w-2xl">
         {/* Progress indicator */}
         <div className="mb-8">
@@ -31,7 +50,11 @@ export default function OnboardingPage() {
               >
                 1
               </div>
-              <div className="w-16 h-1 bg-gray-200 rounded"></div>
+              <div
+                className={`w-16 h-1 rounded ${
+                  currentStep > 1 ? "bg-blue-600" : "bg-gray-200"
+                }`}
+              ></div>
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                   currentStep >= 2
@@ -41,7 +64,11 @@ export default function OnboardingPage() {
               >
                 2
               </div>
-              <div className="w-16 h-1 bg-gray-200 rounded"></div>
+              <div
+                className={`w-16 h-1 rounded ${
+                  currentStep > 2 ? "bg-blue-600" : "bg-gray-200"
+                }`}
+              ></div>
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                   currentStep >= 3
@@ -54,7 +81,7 @@ export default function OnboardingPage() {
             </div>
           </div>
           <p className="text-center text-gray-600">
-            Langkah {currentStep} dari 3
+            Step {currentStep} of 3: {getStepTitle()}
           </p>
         </div>
 
